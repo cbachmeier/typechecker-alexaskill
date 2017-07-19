@@ -1,0 +1,22 @@
+{
+  "name": "typechecker-alexaskill",
+  "version": "1.0.0",
+  "description": "Alexa skill that tells you the strengths and weaknesses of a pokemon type",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cbachmeier/typechecker-alexaskill.git"
+  },
+  "author": "Charles Bachmeier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cbachmeier/typechecker-alexaskill/issues"
+  },
+  "homepage": "https://github.com/cbachmeier/typechecker-alexaskill#readme",
+  "dependencies": {
+    "alexa-sdk": "^1.0.11"
+  }
+}
