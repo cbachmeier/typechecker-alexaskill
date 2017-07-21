@@ -1,12 +1,8 @@
 var Alexa = require('alexa-sdk');
 
-var states = {
-    MAINMODE: '_MAINMODE',              
-};
-
 exports.handler = function(event, context, callback){
     var alexa = Alexa.handler(event, context, callback);
-    alexa.registerHandlers(newSessionHandler,mainModeHandlers);
+    alexa.registerHandlers(newSessionHandler);
     alexa.execute();
 };
 
@@ -69,23 +65,7 @@ var errorMessage = "I'm sorry, I don't recognize that type. Please try a differe
 
 var newSessionHandler = {
     'LaunchRequest': function () {
-        this.handler.state = states.MAINMODE;
         this.emit(':ask', helpMessage);
-    },
-    'AMAZON.HelpIntent': function () {
-        this.emit(':ask', helpMessage);
-    },
-    'SessionEndedRequest': function () {
-        this.emit(':tell',goodbyeMessage);
-    },
-    'Unhandled': function () {
-        this.emit(':ask', errorMessage,helpMessage);
-    }
-};
-
-var mainModeHandlers = Alexa.CreateStateHandler(states.MAINMODE, {
-    'AMAZON.HelpIntent': function () {
-        this.emit(':ask',helpMessage);
     },
     //when asking what types a given type is super effective against
     'EffectiveIntent': function () {
@@ -110,7 +90,7 @@ var mainModeHandlers = Alexa.CreateStateHandler(states.MAINMODE, {
                 else {
                     message+=effectiveTypes[0];
                 }
-                this.emit(':tell',message)
+                this.emit(':ask',message + ". Please ask for another type.",helpMessage)
             }
         }
         else{
@@ -139,16 +119,22 @@ var mainModeHandlers = Alexa.CreateStateHandler(states.MAINMODE, {
             if (type in noEffectAgainst){
                 message+=". "+type+" also has no effect against "+noEffectAgainst[type][0];
             }
-            this.emit(':tell',message)
+            this.emit(':ask',message + ". Please ask for another type.",helpMessage)
         }
         else{
             this.emit(':ask',errorMessage,helpMessage)
         }
     },
+    'AMAZON.HelpIntent': function () {
+        this.emit(':ask', helpMessage);
+    },
+    'AMAZON.StopIntent': function () {
+        this.emit(':tell',goodbyeMessage);
+    }, 
     'SessionEndedRequest': function () {
         this.emit(':tell',goodbyeMessage);
     },
     'Unhandled': function () {
-        this.emit(':ask',errorMessage,helpMessage);
+        this.emit(':ask', errorMessage,helpMessage);
     }
-});
+};
